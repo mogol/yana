@@ -3,6 +3,8 @@ import 'package:flutter_test/flutter_test.dart' hide anyOf;
 import 'package:yana/yana.dart';
 
 void main() {
+  final route = MaterialPageRoute(builder: (_) => Container());
+
   group('page', () {
     test('returns null if condition fails', () {
       final reducer = page<int>(
@@ -22,8 +24,9 @@ void main() {
       );
 
       final node = reducer(0);
-      expect(node.pages, [page1]);
-      expect(node.onPopPage(null, null), isTrue);
+      expect(node, isNotNull);
+      expect(node!.pages, [page1]);
+      expect(node.onPopPage?.call(route, null), equals(true));
     });
   });
 
@@ -48,8 +51,9 @@ void main() {
       );
 
       final node = reducer(0);
-      expect(node.pages, [page1]);
-      expect(node.onPopPage(null, null), isTrue);
+      expect(node, isNotNull);
+      expect(node!.pages, [page1]);
+      expect(node.onPopPage?.call(route, null), isTrue);
     });
 
     test('returns null if first pages condition fails', () {
@@ -97,8 +101,9 @@ void main() {
       );
 
       final node = reducer(0);
-      expect(node.pages, [page1]);
-      expect(node.onPopPage(null, null), isTrue);
+      expect(node, isNotNull);
+      expect(node!.pages, [page1]);
+      expect(node.onPopPage?.call(route, null), isTrue);
     });
 
     test('returns all pages', () {
@@ -125,8 +130,9 @@ void main() {
       );
 
       final node = reducer(0);
-      expect(node.pages, [page1, page2, page3]);
-      expect(node.onPopPage(null, null), isTrue);
+      expect(node, isNotNull);
+      expect(node!.pages, [page1, page2, page3]);
+      expect(node.onPopPage?.call(route, null), isTrue);
     });
   });
 
@@ -151,8 +157,9 @@ void main() {
       );
 
       final node = reducer(0);
-      expect(node.pages, [page1]);
-      expect(node.onPopPage(null, null), isTrue);
+      expect(node, isNotNull);
+      expect(node!.pages, [page1]);
+      expect(node.onPopPage?.call(route, null), isTrue);
     });
 
     test('returns null if all pages conditions fail', () {
@@ -200,8 +207,10 @@ void main() {
       );
 
       final node = reducer(0);
-      expect(node.pages, [page1]);
-      expect(node.onPopPage(null, null), isTrue);
+
+      expect(node, isNotNull);
+      expect(node!.pages, [page1]);
+      expect(node.onPopPage?.call(route, null), isTrue);
     });
 
     test('returns second page if its condition passes', () {
@@ -228,8 +237,9 @@ void main() {
       );
 
       final node = reducer(0);
-      expect(node.pages, [page2]);
-      expect(node.onPopPage(null, null), isTrue);
+      expect(node, isNotNull);
+      expect(node!.pages, [page2]);
+      expect(node.onPopPage?.call(route, null), isTrue);
     });
   });
 
@@ -254,8 +264,9 @@ void main() {
       );
 
       final node = reducer(0);
-      expect(node.pages, [page1]);
-      expect(node.onPopPage(null, null), isTrue);
+      expect(node, isNotNull);
+      expect(node!.pages, [page1]);
+      expect(node.onPopPage?.call(route, null), isTrue);
     });
 
     test('returns null if all pages conditions fail', () {
@@ -303,8 +314,9 @@ void main() {
       );
 
       final node = reducer(0);
-      expect(node.pages, [page1, page3]);
-      expect(node.onPopPage(null, null), isTrue);
+      expect(node, isNotNull);
+      expect(node!.pages, [page1, page3]);
+      expect(node.onPopPage?.call(route, null), isTrue);
     });
 
     test('returns all pages if its condition passes', () {
@@ -331,8 +343,9 @@ void main() {
       );
 
       final node = reducer(0);
-      expect(node.pages, [page1, page2, page3]);
-      expect(node.onPopPage(null, null), isTrue);
+      expect(node, isNotNull);
+      expect(node!.pages, [page1, page2, page3]);
+      expect(node.onPopPage?.call(route, null), isTrue);
     });
   });
 }
