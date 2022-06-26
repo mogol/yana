@@ -1,6 +1,10 @@
-import 'package:example/app_model.dart';
+import 'dart:async';
+
 import 'package:example/flows/flows.dart';
+import 'package:example/redux/app_state.dart';
+import 'package:example/redux/selectors.dart';
 import 'package:flutter/material.dart';
+import 'package:redux/redux.dart';
 import 'package:yana/yana.dart';
 
 class AppRoutePath {}
@@ -23,24 +27,21 @@ class AppRouterDelegate extends RouterDelegate<AppRoutePath>
 
   TreeNavNode _navNode;
 
-  final AppModel state;
+  late StreamSubscription<AppState> _storeSubscription;
 
   AppRouterDelegate(
     this.navigatorKey,
-    this.state,
-  ) : _navNode = buildNavigation(state) {
-    state.addListener(_onChange);
-  }
-
-  void _onChange() {
-    _navNode = buildNavigation(state);
-
-    notifyListeners();
+    Store<AppState> store,
+  ) : _navNode = buildNavigation(store) {
+    _storeSubscription = store.onChange.listen((event) {
+      _navNode = buildNavigation(store);
+      notifyListeners();
+    });
   }
 
   @override
   void dispose() {
-    state.removeListener(_onChange);
+    _storeSubscription.cancel();
 
     super.dispose();
   }
@@ -67,7 +68,7 @@ class AppRouterDelegate extends RouterDelegate<AppRoutePath>
       Future.value(null);
 }
 
-_loginFlow() => anyOf<AppModel>(when: (s) => !s.loggedIn, pages: [
+_loginFlow() => anyOf<AppState>(when: (s) => !s.loggedIn, pages: [
       materialPage(
         when: always,
         name: ScreenKeys.authorization,
@@ -76,7 +77,7 @@ _loginFlow() => anyOf<AppModel>(when: (s) => !s.loggedIn, pages: [
       )
     ]);
 
-_authedFlow() => anyOf<AppModel>(
+_authedFlow() => anyOf<AppState>(
       when: (s) => s.loggedIn,
       pages: [
         materialPage(
@@ -86,7 +87,7 @@ _authedFlow() => anyOf<AppModel>(
           onPopPage: () => false,
         ),
         materialPage(
-          when: (s) => s.selectedBook != null,
+          when: hasSelectedBook,
           name: ScreenKeys.bookDetails,
           builder: (_) => const BookDetailsScreen(),
           onPopPage: () => false,
@@ -95,13 +96,13 @@ _authedFlow() => anyOf<AppModel>(
     );
 
 @visibleForTesting
-TreeNavNode buildNavigation(AppModel model) => firstOf<AppModel>(
+TreeNavNode buildNavigation(Store<AppState> store) => firstOf<AppState>(
       when: always,
       pages: [
         _loginFlow(),
         _authedFlow(),
       ],
-    )(model)!;
+    )(store.state)!;
 
 abstract class ScreenKeys {
   static const authorization = 'Authorization';
