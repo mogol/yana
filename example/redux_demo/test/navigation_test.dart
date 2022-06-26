@@ -21,6 +21,15 @@ void main() {
       expect(pages, hasLength(1));
       expect(pages[0].name, equals(ScreenKeys.authorization));
     });
+
+    test('shows dialog', () {
+      state.dialogs.add('Dialog 1');
+      final pages = buildNavigation(store()).pages;
+
+      expect(pages, hasLength(2));
+      expect(pages[0].name, equals(ScreenKeys.authorization));
+      expect(pages[1].name, equals(ScreenKeys.simplePopUpDialog));
+    });
   });
   group('Authed', () {
     setUp(() => state.loggedIn = true);
@@ -51,6 +60,15 @@ void main() {
         expect(pages, hasLength(2));
         expect(pages[0].name, equals(ScreenKeys.books));
         expect(pages[1].name, equals(ScreenKeys.bookDetails));
+      });
+
+      test('shows dialog', () {
+        state.dialogs.add('Dialog 1');
+        final pages = buildNavigation(store()).pages;
+
+        expect(pages, hasLength(2));
+        expect(pages[0].name, equals(ScreenKeys.books));
+        expect(pages[1].name, equals(ScreenKeys.simplePopUpDialog));
       });
     });
   });

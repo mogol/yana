@@ -7,3 +7,6 @@ Book? selectedBookSel(AppState state) => hasSelectedBook(state)
 BuiltList<Book> booksSel(AppState state) => state.books;
 
 bool hasSelectedBook(AppState state) => state.selectedBookId != null;
+
+bool hasDialogToShow(AppState state) => state.dialogs.isNotEmpty;
+String dialogToShowSel(AppState state) => state.dialogs.first;

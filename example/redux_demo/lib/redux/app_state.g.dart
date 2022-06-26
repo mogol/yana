@@ -13,15 +13,21 @@ class _$AppState extends AppState {
   final BuiltList<Book> books;
   @override
   final String? selectedBookId;
+  @override
+  final BuiltList<String> dialogs;
 
   factory _$AppState([void Function(AppStateBuilder)? updates]) =>
       (new AppStateBuilder()..update(updates))._build();
 
   _$AppState._(
-      {required this.loggedIn, required this.books, this.selectedBookId})
+      {required this.loggedIn,
+      required this.books,
+      this.selectedBookId,
+      required this.dialogs})
       : super._() {
     BuiltValueNullFieldError.checkNotNull(loggedIn, r'AppState', 'loggedIn');
     BuiltValueNullFieldError.checkNotNull(books, r'AppState', 'books');
+    BuiltValueNullFieldError.checkNotNull(dialogs, r'AppState', 'dialogs');
   }
 
   @override
@@ -37,13 +43,16 @@ class _$AppState extends AppState {
     return other is AppState &&
         loggedIn == other.loggedIn &&
         books == other.books &&
-        selectedBookId == other.selectedBookId;
+        selectedBookId == other.selectedBookId &&
+        dialogs == other.dialogs;
   }
 
   @override
   int get hashCode {
-    return $jf($jc($jc($jc(0, loggedIn.hashCode), books.hashCode),
-        selectedBookId.hashCode));
+    return $jf($jc(
+        $jc($jc($jc(0, loggedIn.hashCode), books.hashCode),
+            selectedBookId.hashCode),
+        dialogs.hashCode));
   }
 
   @override
@@ -51,7 +60,8 @@ class _$AppState extends AppState {
     return (newBuiltValueToStringHelper(r'AppState')
           ..add('loggedIn', loggedIn)
           ..add('books', books)
-          ..add('selectedBookId', selectedBookId))
+          ..add('selectedBookId', selectedBookId)
+          ..add('dialogs', dialogs))
         .toString();
   }
 }
@@ -72,6 +82,11 @@ class AppStateBuilder implements Builder<AppState, AppStateBuilder> {
   set selectedBookId(String? selectedBookId) =>
       _$this._selectedBookId = selectedBookId;
 
+  ListBuilder<String>? _dialogs;
+  ListBuilder<String> get dialogs =>
+      _$this._dialogs ??= new ListBuilder<String>();
+  set dialogs(ListBuilder<String>? dialogs) => _$this._dialogs = dialogs;
+
   AppStateBuilder();
 
   AppStateBuilder get _$this {
@@ -80,6 +95,7 @@ class AppStateBuilder implements Builder<AppState, AppStateBuilder> {
       _loggedIn = $v.loggedIn;
       _books = $v.books.toBuilder();
       _selectedBookId = $v.selectedBookId;
+      _dialogs = $v.dialogs.toBuilder();
       _$v = null;
     }
     return this;
@@ -107,12 +123,16 @@ class AppStateBuilder implements Builder<AppState, AppStateBuilder> {
               loggedIn: BuiltValueNullFieldError.checkNotNull(
                   loggedIn, r'AppState', 'loggedIn'),
               books: books.build(),
-              selectedBookId: selectedBookId);
+              selectedBookId: selectedBookId,
+              dialogs: dialogs.build());
     } catch (_) {
       late String _$failedField;
       try {
         _$failedField = 'books';
         books.build();
+
+        _$failedField = 'dialogs';
+        dialogs.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
             r'AppState', _$failedField, e.toString());

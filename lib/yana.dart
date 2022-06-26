@@ -43,6 +43,7 @@ TreeNavReducer<T> page<T>({
   );
 }
 
+/// Represent a widget wrapped in [MaterialPage]
 TreeNavReducer<T> materialPage<T>({
   required TreeNavCondition<T> when,
   required String name,
@@ -58,6 +59,87 @@ TreeNavReducer<T> materialPage<T>({
       ),
     );
 
+/// Represent a widget that is equivalent for [showGeneralDialog]
+TreeNavReducer<T> popUpDialog<T>({
+  required TreeNavCondition<T> when,
+  required String name,
+  required WidgetBuilder builder,
+  required bool Function() onPopPage,
+  Color barrierColor = const Color(0x80000000),
+}) =>
+    page(
+      when: when,
+      builder: (_) => TreeNavNode(
+        _PopupPage(
+          key: ValueKey(name),
+          name: name,
+          child: Builder(builder: builder),
+          barrierColor: barrierColor,
+        ),
+        (_, __) => onPopPage(),
+      ),
+    );
+
+class _PopupPage<T> extends Page<T> {
+  const _PopupPage({
+    required this.child,
+    required this.barrierColor,
+    this.maintainState = true,
+    LocalKey? key,
+    String? name,
+    Object? arguments,
+  }) : super(key: key, name: name, arguments: arguments);
+
+  final Widget child;
+  final bool maintainState;
+  final Color barrierColor;
+
+  @override
+  Route<T> createRoute(BuildContext context) {
+    return RawDialogRoute<T>(
+      pageBuilder: (_, __, ___) => child,
+      settings: this,
+      barrierDismissible: false,
+      barrierColor: barrierColor,
+      transitionBuilder: (context, animation, secondaryAnimation, child) {
+        const begin = Offset(0.0, 1.0);
+        const end = Offset(0.0, 0.0);
+        const curve = Curves.easeIn;
+
+        final tween =
+            Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+
+        return SlideTransition(
+          position: animation.drive(tween),
+          child: child,
+        );
+      },
+    );
+  }
+}
+
+/// Returns all page from [pages] until first item that doesn't satisfy its [when] predicate
+///
+///```dart
+///final buildNavigation = flow<int>(
+///    when: (state) => state == 0,
+///    pages: [
+///      page<int>(
+///        when: (state) => state == 0,
+///        builder: (_) => TreeNavNode(page1, (_, __) => true),
+///      ),
+///      page<int>(
+///        when: (state) => state == 1,
+///        builder: (_) => TreeNavNode(page2, (_, __) => false),
+///      ),
+///      page<int>(
+///        when: (state) => state == 0,
+///        builder: (_) => TreeNavNode(page3, (_, __) => false),
+///      ),
+///  ],
+///)
+///```
+///[buildNavigation(0)] returns only the first page
 TreeNavReducer<T> flow<T>({
   required TreeNavCondition<T> when,
   required List<TreeNavReducer<T>> pages,
@@ -78,6 +160,28 @@ TreeNavReducer<T> flow<T>({
   });
 }
 
+/// Returns item from [pages] which satisfies its own [when] predicate
+///
+///```dart
+///final buildNavigation = firstOf<int>(
+///    when: (state) => state == 0,
+///    pages: [
+///      page<int>(
+///        when: (state) => state == 1,
+///        builder: (_) => TreeNavNode(page1, (_, __) => true),
+///      ),
+///      page<int>(
+///        when: (state) => state == 0,
+///        builder: (_) => TreeNavNode(page2, (_, __) => false),
+///      ),
+///      page<int>(
+///        when: (state) => state == 0,
+///        builder: (_) => TreeNavNode(page3, (_, __) => false),
+///      ),
+///  ],
+///)
+///```
+///[buildNavigation(0)] returns only the second page
 TreeNavReducer<T> firstOf<T>({
   required TreeNavCondition<T> when,
   required List<TreeNavReducer<T>> pages,
@@ -96,6 +200,28 @@ TreeNavReducer<T> firstOf<T>({
   });
 }
 
+/// Returns all items from [pages] which satisfy their own [when] predicate
+///
+///```dart
+///final buildNavigation = anyOf<int>(
+///    when: (state) => state == 0,
+///    pages: [
+///      page<int>(
+///        when: (state) => state == 0,
+///        builder: (_) => TreeNavNode(page1, (_, __) => true),
+///      ),
+///      page<int>(
+///        when: (state) => state == 1,
+///        builder: (_) => TreeNavNode(page2, (_, __) => false),
+///      ),
+///      page<int>(
+///        when: (state) => state == 0,
+///        builder: (_) => TreeNavNode(page3, (_, __) => false),
+///      ),
+///  ],
+///)
+///```
+///[buildNavigation(0)] returns only the first and the third pages
 TreeNavReducer<T> anyOf<T>({
   required TreeNavCondition<T> when,
   required List<TreeNavReducer<T>> pages,

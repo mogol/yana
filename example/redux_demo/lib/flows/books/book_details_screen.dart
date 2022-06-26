@@ -20,11 +20,13 @@ class BookDetailsScreen extends StatelessWidget {
 }
 
 class _ViewModel {
-  final Function onBack;
+  final Function() onLike;
+  final Function() onBack;
   final String title;
   final String author;
 
   _ViewModel({
+    required this.onLike,
     required this.onBack,
     required this.title,
     required this.author,
@@ -33,9 +35,10 @@ class _ViewModel {
   static _ViewModel fromStore(Store<AppState> store, BuildContext context) {
     final book = selectedBookSel(store.state)!;
     return _ViewModel(
-      onBack: () => store.dispatch(SetSelectedBookIdAction()),
       title: book.title,
       author: book.author,
+      onBack: () => store.dispatch(SetSelectedBookIdAction()),
+      onLike: () => store.dispatch(ShowDialogAction('You liked the book!')),
     );
   }
 }
@@ -67,6 +70,10 @@ class _View extends StatelessWidget {
                 viewModel.author,
                 style: Theme.of(context).textTheme.headline4,
               ),
+              IconButton(
+                onPressed: viewModel.onLike,
+                icon: const Icon(Icons.thumb_up),
+              )
             ],
           ),
         ),

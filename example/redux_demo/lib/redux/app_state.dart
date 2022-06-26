@@ -7,6 +7,9 @@ abstract class AppState implements Built<AppState, AppStateBuilder> {
   bool get loggedIn;
   BuiltList<Book> get books;
   String? get selectedBookId;
+
+  BuiltList<String> get dialogs;
+
   AppState._();
 
   factory AppState([void Function(AppStateBuilder) updates]) = _$AppState;

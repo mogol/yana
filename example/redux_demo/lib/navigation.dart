@@ -99,11 +99,22 @@ _authedFlow() => anyOf<AppState>(
     );
 
 @visibleForTesting
-TreeNavNode buildNavigation(Store<AppState> store) => firstOf<AppState>(
+TreeNavNode buildNavigation(Store<AppState> store) => anyOf(
       when: always,
       pages: [
-        _loginFlow(),
-        _authedFlow(),
+        firstOf<AppState>(
+          when: always,
+          pages: [
+            _loginFlow(),
+            _authedFlow(),
+          ],
+        ),
+        popUpDialog(
+          when: hasDialogToShow,
+          name: ScreenKeys.simplePopUpDialog,
+          builder: (_) => const SimplePopUpDialog(),
+          onPopPage: () => false,
+        )
       ],
     )(store.state)!;
 
@@ -111,4 +122,5 @@ abstract class ScreenKeys {
   static const authorization = 'Authorization';
   static const bookDetails = 'BookDetails';
   static const books = 'Books';
+  static const simplePopUpDialog = 'SimplePopUpDialog';
 }
