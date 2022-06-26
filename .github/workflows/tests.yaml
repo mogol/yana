@@ -1,0 +1,24 @@
+name: Flutter
+on:
+  pull_request:
+  push:
+    branches:
+      - master
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: "stable"
+      - name: Recursive pub get
+        run: find . -name 'pubspec.yaml' -execdir flutter pub get \;
+
+      - name: Check formatting
+        run: flutter format --set-exit-if-changed .
+      - name: Run Analyzer
+        run: flutter analyze .
+
+      - name: Recursive flutter test
+        run: find . -name 'pubspec.yaml' -execdir flutter test \;
