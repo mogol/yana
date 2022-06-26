@@ -68,14 +68,17 @@ class AppRouterDelegate extends RouterDelegate<AppRoutePath>
       Future.value(null);
 }
 
-_loginFlow() => anyOf<AppState>(when: (s) => !s.loggedIn, pages: [
-      materialPage(
-        when: always,
-        name: ScreenKeys.authorization,
-        builder: (_) => const LoginScreen(),
-        onPopPage: () => false,
-      )
-    ]);
+_loginFlow() => anyOf<AppState>(
+      when: (s) => !s.loggedIn,
+      pages: [
+        materialPage(
+          when: always,
+          name: ScreenKeys.authorization,
+          builder: (_) => const LoginScreen(),
+          onPopPage: () => false,
+        )
+      ],
+    );
 
 _authedFlow() => anyOf<AppState>(
       when: (s) => s.loggedIn,
