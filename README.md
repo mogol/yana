@@ -111,7 +111,7 @@ Check examples with redux and provider state management.
 
 ### How to customize a presentation of a page?
 
-Check implementation `popUpDialog` for example.
+Check implementation `popUpDialog` for inspiration.
 
 ## Status
 
