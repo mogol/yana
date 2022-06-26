@@ -6,6 +6,8 @@ Reducer<AppState> appReducers() => combineReducers<AppState>([
       TypedReducer(_onSetLoggedInAction),
       TypedReducer(_onSetBooksAction),
       TypedReducer(_onSetSelectedBookIdAction),
+      TypedReducer(_onShowDialogAction),
+      TypedReducer(_onHideDialogAction),
     ]);
 
 AppState _onSetLoggedInAction(
@@ -25,3 +27,15 @@ AppState _onSetSelectedBookIdAction(
   SetSelectedBookIdAction action,
 ) =>
     state.rebuild((s) => s.selectedBookId = action.id);
+
+AppState _onShowDialogAction(
+  AppState state,
+  ShowDialogAction action,
+) =>
+    state.rebuild((s) => s.dialogs.add(action.text));
+
+AppState _onHideDialogAction(
+  AppState state,
+  HideDialogAction action,
+) =>
+    state.dialogs.isEmpty ? state : state.rebuild((s) => s.dialogs.removeAt(0));

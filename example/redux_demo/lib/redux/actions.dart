@@ -32,3 +32,11 @@ class SetLoggedInAction {
 
   SetLoggedInAction(this.loggedIn);
 }
+
+class ShowDialogAction {
+  final String text;
+
+  ShowDialogAction(this.text);
+}
+
+class HideDialogAction {}

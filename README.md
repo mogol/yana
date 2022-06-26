@@ -107,6 +107,12 @@ expect(pages[0].name, equals(ScreenKeys.books));
 
 Check examples with redux and provider state management.
 
+## Advanced
+
+### How to customize a presentation of a page?
+
+Check implementation `popUpDialog` for example.
+
 ## Status
 
 - Production-ready. The library has been used in multiple applications since 2019.
