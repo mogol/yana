@@ -116,4 +116,5 @@ TreeNavReducer<T> anyOf<T>({
   });
 }
 
+// ignore: prefer_function_declarations_over_variables
 final always = (_) => true;
