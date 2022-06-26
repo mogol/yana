@@ -351,9 +351,7 @@ void main() {
 }
 
 class MockMaterialPage extends MaterialPage {
-  final String name;
-
-  MockMaterialPage(this.name) : super(child: Container());
+  MockMaterialPage(String name) : super(child: Container(), name: name);
 
   @override
   String toString() {

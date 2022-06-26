@@ -1,7 +1,6 @@
 library yana;
 
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 typedef TreeNavCondition<T> = bool Function(T);
 
@@ -117,48 +116,5 @@ TreeNavReducer<T> anyOf<T>({
   });
 }
 
+// ignore: prefer_function_declarations_over_variables
 final always = (_) => true;
-
-class _DialogPage<T> extends Page<T> {
-  const _DialogPage({
-    required this.child,
-    this.maintainState = true,
-    LocalKey? key,
-    String? name,
-    Object? arguments,
-  }) : super(key: key, name: name, arguments: arguments);
-
-  final Widget child;
-  final bool maintainState;
-
-  @override
-  Route<T> createRoute(BuildContext context) {
-    return _DialogPageRoute<T>(page: this);
-  }
-}
-
-class _DialogPageRoute<T> extends PageRoute<T>
-    with MaterialRouteTransitionMixin<T> {
-  _DialogPageRoute({
-    required _DialogPage<T> page,
-  }) : super(settings: page);
-
-  _DialogPage<T> get _page => settings as _DialogPage<T>;
-
-  @override
-  Widget buildContent(BuildContext context) {
-    return _page.child;
-  }
-
-  @override
-  bool get opaque => false;
-
-  @override
-  bool get maintainState => _page.maintainState;
-
-  @override
-  bool get fullscreenDialog => true;
-
-  @override
-  String get debugLabel => '${super.debugLabel}(${_page.name})';
-}
